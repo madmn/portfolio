@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jake Walkden // Portfolio</title>
+  <style>
+    :root {
+      --bg:           #050a0f;
+      --bg-slot:      #0a1520;
+      --teal:         #00ffcc;
+      --teal-glow:    rgba(0, 255, 204, 0.2);
+      --accent:       #ff00ff;
+      --text:         #c0e0d8;
+      --text-dim:     #4a7a6a;
+      --border:       rgba(0, 255, 204, 0.2);
+      --border-hot:   rgba(0, 255, 204, 0.7);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(32px, 5vh, 72px) clamp(20px, 4vw, 64px) 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 1400px;
+      margin-bottom: clamp(32px, 4vh, 56px);
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sys-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 3vw, 48px);
+      font-weight: normal;
+      color: var(--teal);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(0, 255, 204, 0.6), 0 0 50px rgba(0, 255, 204, 0.2);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: clamp(10px, 1.2vw, 18px);
+      height: 1.1em;
+      background: var(--teal);
+      vertical-align: bottom;
+      margin-left: 6px;
+      animation: blink 1.2s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .header-sub {
+      font-size: clamp(11px, 1vw, 14px);
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    .mem-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .mem-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-track {
+      width: clamp(120px, 12vw, 200px);
+      height: 6px;
+      background: rgba(0, 255, 204, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .bar-fill {
+      width: 44%;
+      height: 100%;
+      background: var(--teal);
+      box-shadow: 0 0 6px rgba(0, 255, 204, 0.9);
+    }
+
+    /* ── Grid ── */
+    .grid-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ── Save Slot ── */
+    .slot {
+      border: 1px solid var(--border);
+      background: var(--bg-slot);
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+
+    .slot:hover,
+    .slot:focus-visible,
+    .slot.active {
+      border-color: var(--border-hot);
+      background: rgba(0, 255, 204, 0.04);
+      box-shadow: 0 0 18px rgba(0, 255, 204, 0.18), inset 0 0 18px rgba(0, 255, 204, 0.04);
+    }
+
+    .slot.active {
+      border-color: var(--teal);
+      animation: slot-pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes slot-pulse {
+      0%, 100% { box-shadow: 0 0 18px rgba(0, 255, 204, 0.18), inset 0 0 18px rgba(0, 255, 204, 0.04); }
+      50%       { box-shadow: 0 0 30px rgba(0, 255, 204, 0.32), inset 0 0 28px rgba(0, 255, 204, 0.08); }
+    }
+
+    .slot-icon {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #020810;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* scanlines */
+    .slot-icon::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.22) 3px,
+        rgba(0, 0, 0, 0.22) 4px
+      );
+      pointer-events: none;
+    }
+
+    .slot-icon svg {
+      width: 42%;
+      height: 42%;
+      opacity: 0.22;
+      transition: opacity 0.2s;
+    }
+
+    .slot:hover .slot-icon svg,
+    .slot:focus-visible .slot-icon svg,
+    .slot.active .slot-icon svg {
+      opacity: 0.55;
+    }
+
+    .slot-info {
+      padding: 10px 14px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .slot-name {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: text-shadow 0.2s;
+    }
+
+    .slot:hover .slot-name,
+    .slot:focus-visible .slot-name,
+    .slot.active .slot-name {
+      text-shadow: 0 0 8px rgba(0, 255, 204, 0.7);
+    }
+
+    .slot-tag {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .slot.empty {
+      cursor: default;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* ── Detail Panel ── */
+    .detail-panel {
+      border: 1px solid var(--border);
+      background: var(--bg-slot);
+      padding: clamp(24px, 3vh, 40px) clamp(24px, 3vw, 48px);
+      min-height: clamp(180px, 20vh, 260px);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .detail-panel.populated {
+      border-color: rgba(0, 255, 204, 0.35);
+    }
+
+    /* top accent line */
+    .detail-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .detail-panel.populated::before {
+      opacity: 1;
+    }
+
+    .detail-idle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: clamp(130px, 15vh, 180px);
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .detail-idle::before {
+      content: '▶  ';
+    }
+
+    .detail-data {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 3vw, 48px);
+    }
+
+    .detail-data.visible {
+      display: grid;
+    }
+
+    @media (max-width: 640px) {
+      .detail-data.visible { grid-template-columns: 1fr; }
+    }
+
+    .detail-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .detail-title {
+      font-size: clamp(20px, 2.2vw, 34px);
+      color: var(--teal);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px rgba(0, 255, 204, 0.5);
+      margin-bottom: 14px;
+    }
+
+    .detail-desc {
+      font-size: clamp(13px, 1vw, 15px);
+      line-height: 1.8;
+      color: var(--text);
+      letter-spacing: 0.4px;
+    }
+
+    .detail-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 0, 255, 0.35);
+      padding-bottom: 1px;
+      transition: text-shadow 0.2s;
+    }
+
+    .detail-link:hover {
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.9);
+    }
+
+    .meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .meta-value {
+      font-size: clamp(13px, 1vw, 15px);
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid rgba(0, 255, 204, 0.28);
+      color: var(--teal);
+      background: rgba(0, 255, 204, 0.05);
+    }
+
+    /* ── Footer ── */
+    footer {
+      width: 100%;
+      max-width: 1400px;
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .contact-link {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: text-shadow 0.2s;
+    }
+
+    .contact-link:hover {
+      text-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="sys-label">System · Memory Card · 8MB</div>
+    <div class="header-row">
+      <div>
+        <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
+        <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
+      </div>
+      <div class="mem-bar-wrap">
+        <span>Memory used</span>
+        <div class="mem-bar">
+          <div class="bar-track"><div class="bar-fill"></div></div>
+          <span>4 / 9 blocks</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid-label">— Select a save slot to load project data —</div>
+
+  <main>
+    <div class="slot-grid" id="slotGrid"></div>
+
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-idle" id="detailIdle">Hover a slot to preview</div>
+      <div class="detail-data" id="detailData"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-text">&copy; 2026 Jake Walkden</div>
+    <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
+  </footer>
+
+  <script>
+    const projects = [
+      {
+        name:  'UGC Creation',
+        tag:   'Hard Surface',
+        year:  '2022-Present',
+        tools: ['Blender', 'Substance Painter', 'Adobe'],
+        desc:  'Detailed hard-surface mech designed for real-time rendering. Focused on PBR material authoring, panel-line work, and realistic surface wear.',
+        link:  null,
+      },
+      {
+        name:  'Neon Alley',
+        tag:   'Environment',
+        year:  '2024',
+        tools: ['Blender', 'Unreal Engine 5'],
+        desc:  'Cyberpunk alleyway environment built for real-time rendering in UE5. Modular asset kit with procedural decay and handcrafted neon signage.',
+        link:  null,
+      },
+      {
+        name:  'Echo-9',
+        tag:   'Character',
+        year:  '2023',
+        tools: ['ZBrush', 'Maya', 'Substance Painter'],
+        desc:  'High-poly character sculpt, retopologised and rigged for animation. Facial blend shapes baked from ZBrush for expressive performance.',
+        link:  null,
+      },
+      {
+        name:  'Portfolio Site',
+        tag:   'Web Dev',
+        year:  '2025',
+        tools: ['HTML', 'CSS', 'JavaScript'],
+        desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
+        link:  null,
+      },
+    ];
+
+    const TOTAL_SLOTS = 9;
+
+    const ICONS = {
+      'Hard Surface': `
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="28,8 48,44 8,44" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <polygon points="28,18 40,40 16,40" stroke="#00ffcc" stroke-width="0.8" stroke-dasharray="3,2" fill="none"/>
+          <line x1="28" y1="8" x2="28" y2="18" stroke="#00ffcc" stroke-width="0.8"/>
+        </svg>`,
+      'Environment': `
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="26" width="36" height="22" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <polyline points="10,26 28,10 46,26" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <rect x="22" y="34" width="12" height="14" stroke="#00ffcc" stroke-width="0.8" fill="none"/>
+        </svg>`,
+      'Character': `
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="18" r="9" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <path d="M13 48 Q13 32 28 32 Q43 32 43 48" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+        </svg>`,
+      'Web Dev': `
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="12" width="44" height="32" rx="2" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <line x1="6" y1="22" x2="50" y2="22" stroke="#00ffcc" stroke-width="0.9"/>
+          <rect x="12" y="28" width="14" height="10" stroke="#00ffcc" stroke-width="0.8" fill="none"/>
+          <line x1="32" y1="30" x2="44" y2="30" stroke="#00ffcc" stroke-width="0.8"/>
+          <line x1="32" y1="35" x2="40" y2="35" stroke="#00ffcc" stroke-width="0.8"/>
+        </svg>`,
+      empty: `
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="16" width="24" height="24" stroke="#00ffcc" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="16" y1="16" x2="40" y2="40" stroke="#00ffcc" stroke-width="0.8"/>
+          <line x1="40" y1="16" x2="16" y2="40" stroke="#00ffcc" stroke-width="0.8"/>
+        </svg>`,
+    };
+
+    function renderGrid() {
+      const grid = document.getElementById('slotGrid');
+
+      for (let i = 0; i < TOTAL_SLOTS; i++) {
+        const p = projects[i] || null;
+
+        const slot = document.createElement('div');
+        slot.className = 'slot' + (p ? '' : ' empty');
+        if (p) {
+          slot.setAttribute('tabindex', '0');
+          slot.setAttribute('role', 'button');
+          slot.setAttribute('aria-label', p.name);
+        }
+
+        slot.innerHTML = `
+          <div class="slot-icon">${p ? ICONS[p.tag] || ICONS.empty : ICONS.empty}</div>
+          <div class="slot-info">
+            <div class="slot-name">${p ? p.name : '— Empty —'}</div>
+            <div class="slot-tag">${p ? p.tag + ' &middot; ' + p.year : 'No data'}</div>
+          </div>`;
+
+        if (p) {
+          const activate = () => showDetail(i);
+          slot.addEventListener('mouseenter', activate);
+          slot.addEventListener('focus', activate);
+          slot.addEventListener('click', activate);
+          slot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activate(); });
+        }
+
+        grid.appendChild(slot);
+      }
+    }
+
+    function showDetail(index) {
+      const p = projects[index];
+      if (!p) return;
+
+      document.querySelectorAll('.slot').forEach((s, i) => {
+        s.classList.toggle('active', i === index);
+      });
+
+      const panel  = document.getElementById('detailPanel');
+      const idle   = document.getElementById('detailIdle');
+      const data   = document.getElementById('detailData');
+
+      panel.classList.add('populated');
+      idle.style.display  = 'none';
+      data.classList.add('visible');
+
+      data.innerHTML = `
+        <div class="detail-main">
+          <div class="detail-label">Project</div>
+          <div class="detail-title">${p.name}</div>
+          <div class="detail-desc">${p.desc}</div>
+          ${p.link ? `<a class="detail-link" href="${p.link}" target="_blank" rel="noopener">View Project &#9654;</a>` : ''}
+        </div>
+        <div class="meta-col">
+          <div>
+            <div class="detail-label">Category</div>
+            <div class="meta-value">${p.tag}</div>
+          </div>
+          <div>
+            <div class="detail-label">Year</div>
+            <div class="meta-value">${p.year}</div>
+          </div>
+          <div>
+            <div class="detail-label">Tools</div>
+            <div class="tag-list">${p.tools.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          </div>
+        </div>`;
+    }
+
+    renderGrid();
+  </script>
+</body>
+</html>
