@@ -8,10 +8,10 @@
     :root {
       --bg:           #050a0f;
       --bg-slot:      #0a1520;
-      --teal:         #00ffcc;
-      --teal-glow:    rgba(0, 255, 204, 0.2);
-      --accent:       #ff00ff;
-      --text:         #c0e0d8;
+      --teal:         #0fac3e;
+      --teal-glow:    rgba(9, 255, 0, 0.2);
+      --accent:       #00eeff;
+      --text:         #c0e0c1;
       --text-dim:     #4a7a6a;
       --border:       rgba(0, 255, 204, 0.2);
       --border-hot:   rgba(0, 255, 204, 0.7);
@@ -28,10 +28,298 @@
       color: var(--text);
       font-family: 'Courier New', Courier, monospace;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Page Transition ── */
+    #appWrap {
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
       padding: clamp(32px, 5vh, 72px) clamp(20px, 4vw, 64px) 80px;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    #appWrap.slide-out {
+      transform: translateX(-100%);
+    }
+
+    /* ── Detail Overlay ── */
+    #pageDetail {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    #pageDetail.open {
+      transform: translateX(0);
+    }
+
+    .detail-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: clamp(32px, 5vh, 72px) clamp(20px, 4vw, 64px) 80px;
+    }
+
+    /* ── Detail Page Header ── */
+    .detail-page-header {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: clamp(32px, 4vh, 56px);
+    }
+
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--teal);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .back-btn:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+
+    /* ── Hero Layout ── */
+    .hero-layout {
+      width: 100%;
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: 5fr 3fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-layout                    { grid-template-columns: 1fr; }
+      .hero-caption                   { grid-row: 3; }
+    }
+
+    /* ── Hero ── */
+    .detail-hero {
+      grid-column: 1;
+      grid-row: 1;
+      background: #020810;
+    }
+
+    .hero-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px dashed rgba(0, 255, 204, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.18) 3px,
+        rgba(0, 0, 0, 0.18) 4px
+      );
+      pointer-events: none;
+    }
+
+    .hero-media {
+      width: 100%;
+      height: auto;
+      max-height: 75vh;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* ── Caption Panel ── */
+    .hero-caption {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      border: 1px solid var(--border);
+      background: var(--bg-slot);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-caption::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+
+    .caption-index {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .caption-title {
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-transform: uppercase;
+    }
+
+    .caption-body {
+      font-size: clamp(13px, 1vw, 15px);
+      line-height: 1.9;
+      color: var(--text);
+      letter-spacing: 0.4px;
+    }
+
+    .caption-empty {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed rgba(0, 255, 204, 0.12);
+    }
+
+    /* ── Thumbnail Strip ── */
+    .detail-thumbs {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .thumbs-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 255, 204, 0.25) transparent;
+    }
+
+    .thumbs-strip::-webkit-scrollbar        { height: 3px; }
+    .thumbs-strip::-webkit-scrollbar-track  { background: transparent; }
+    .thumbs-strip::-webkit-scrollbar-thumb  { background: rgba(0, 255, 204, 0.25); }
+
+    .thumb {
+      width: 110px;
+      aspect-ratio: 1;
+      flex-shrink: 0;
+      background: #020810;
+      border: 1px dashed rgba(0, 255, 204, 0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.18) 3px,
+        rgba(0, 0, 0, 0.18) 4px
+      );
+      pointer-events: none;
+    }
+
+    .thumb:hover       { border-color: rgba(0, 255, 204, 0.5); }
+    .thumb.active      { border: 1px solid var(--teal); box-shadow: 0 0 10px rgba(0, 255, 204, 0.25); }
+
+    .thumb-num {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+
+    .thumb img,
+    .thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Detail Info ── */
+    .detail-info-grid {
+      width: 100%;
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 3vw, 64px);
+    }
+
+    @media (max-width: 640px) {
+      .detail-info-grid { grid-template-columns: 1fr; }
+    }
+
+    .detail-project-title {
+      font-size: clamp(22px, 2.8vw, 44px);
+      font-weight: normal;
+      color: var(--teal);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+      margin-bottom: 16px;
+    }
+
+    /* ── Detail Footer ── */
+    .detail-footer {
+      width: 100%;
+      max-width: 1400px;
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     /* ── Header ── */
@@ -84,7 +372,7 @@
     }
 
     .header-sub {
-      font-size: clamp(11px, 1vw, 14px);
+      font-size: clamp(12px, 1vw, 14px);
       letter-spacing: 3px;
       color: var(--text-dim);
       margin-top: 8px;
@@ -124,7 +412,7 @@
 
     /* ── Grid ── */
     .grid-label {
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 3px;
       color: var(--text-dim);
       text-transform: uppercase;
@@ -184,7 +472,6 @@
       position: relative;
     }
 
-    /* scanlines */
     .slot-icon::after {
       content: '';
       position: absolute;
@@ -197,6 +484,13 @@
         rgba(0, 0, 0, 0.22) 4px
       );
       pointer-events: none;
+    }
+
+    .slot-icon video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .slot-icon svg {
@@ -248,7 +542,7 @@
       pointer-events: none;
     }
 
-    /* ── Detail Panel ── */
+    /* ── Hover Preview Panel ── */
     .detail-panel {
       border: 1px solid var(--border);
       background: var(--bg-slot);
@@ -263,7 +557,6 @@
       border-color: rgba(0, 255, 204, 0.35);
     }
 
-    /* top accent line */
     .detail-panel::before {
       content: '';
       position: absolute;
@@ -339,13 +632,13 @@
       text-transform: uppercase;
       color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px solid rgba(255, 0, 255, 0.35);
+      border-bottom: 1px solid rgba(0, 238, 255, 0.35);
       padding-bottom: 1px;
       transition: text-shadow 0.2s;
     }
 
     .detail-link:hover {
-      text-shadow: 0 0 10px rgba(255, 0, 255, 0.9);
+      text-shadow: 0 0 10px rgba(0, 238, 255, 0.9);
     }
 
     .meta-col {
@@ -413,64 +706,93 @@
 </head>
 <body>
 
-  <header>
-    <div class="sys-label">System · Memory Card · 8MB</div>
-    <div class="header-row">
-      <div>
-        <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
-        <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
-      </div>
-      <div class="mem-bar-wrap">
-        <span>Memory used</span>
-        <div class="mem-bar">
-          <div class="bar-track"><div class="bar-fill"></div></div>
-          <span>4 / 9 blocks</span>
+  <div id="appWrap">
+    <header>
+      <div class="sys-label">System · Memory Card · 8MB</div>
+      <div class="header-row">
+        <div>
+          <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
+          <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
+        </div>
+        <div class="mem-bar-wrap">
+          <span>Memory used</span>
+          <div class="mem-bar">
+            <div class="bar-track"><div class="bar-fill"></div></div>
+            <span>4 / 12 blocks</span>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <div class="grid-label">— Select a save slot to load project data —</div>
+    <div class="grid-label">— Select a save slot to load project data —</div>
 
-  <main>
-    <div class="slot-grid" id="slotGrid"></div>
+    <main>
+      <div class="slot-grid" id="slotGrid"></div>
 
-    <div class="detail-panel" id="detailPanel">
-      <div class="detail-idle" id="detailIdle">Hover a slot to preview</div>
-      <div class="detail-data" id="detailData"></div>
-    </div>
-  </main>
+      <div class="detail-panel" id="detailPanel">
+        <div class="detail-idle" id="detailIdle">Hover a slot to preview</div>
+        <div class="detail-data" id="detailData"></div>
+      </div>
+    </main>
 
-  <footer>
-    <div class="footer-text">&copy; 2026 Jake Walkden</div>
-    <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
-  </footer>
+    <footer>
+      <div class="footer-text">&copy; 2026 Jake Walkden</div>
+      <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
+    </footer>
+  </div>
+
+  <div id="pageDetail"></div>
 
   <script>
     const projects = [
       {
         name:  'UGC Creation',
-        tag:   'Hard Surface',
+        tag:   'All Areas',
         year:  '2022-Present',
-        tools: ['Blender', 'Substance Painter', 'Adobe'],
-        desc:  'Detailed hard-surface mech designed for real-time rendering. Focused on PBR material authoring, panel-line work, and realistic surface wear.',
+        tools: ['Blender', 'Substance Painter', 'Adobe Suite'],
+        desc:  'A collection of UGC items created for the Roblox platform — rigid accessories and layered clothing spanning streetwear, armour, and fantasy themes. Built to platform mesh and texture specifications, with attention to silhouette readability at small avatar scale. Optimised for the platform, all assets are under 4000 triangles.',
         link:  null,
+        video: 'assets/videos/helmet-turnaround.webm',
+        media: [
+          { type: 'video',  src: 'assets/videos/helmet-turnaround.webm', poster: null, captionTitle: 'M1 Helmet', caption: 'Rigid accessory created for the roblox platform. Created in Blender, textured with photoshop and Substance Painter. Camo pattern hand painted by myself in Photoshop.' },
+          { type: 'image',  src: 'assets/images/ugc-02.jpg',             captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/ugc-03.jpg',             captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/ugc-04.jpg',             captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/ugc-04.jpg',             captionTitle: '', caption: '' },
+        ],
       },
       {
-        name:  'Neon Alley',
+        name:  'GoGo Climb',
         tag:   'Environment',
-        year:  '2024',
-        tools: ['Blender', 'Unreal Engine 5'],
-        desc:  'Cyberpunk alleyway environment built for real-time rendering in UE5. Modular asset kit with procedural decay and handcrafted neon signage.',
+        year:  '2026',
+        tools: ['Blender', 'Roblox Studio'],
+        desc:  'Stylized environment built for Roblox. Mix of asset packs and created assets were used in the creation. Client — GoGo Squeeeze. Start of blockout to completion: 6 Weeks.',
         link:  null,
+        video: 'assets/videos/gogo-turnaround.webm',
+        media: [
+          { type: 'image',  src: 'assets/images/gogo1.png',   poster: null, captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo5.png',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo8.png',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo4.png',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo2.png',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo6.png',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gogo7.png',            captionTitle: '', caption: '' },
+
+        ],
       },
       {
-        name:  'Echo-9',
-        tag:   'Character',
-        year:  '2023',
-        tools: ['ZBrush', 'Maya', 'Substance Painter'],
-        desc:  'High-poly character sculpt, retopologised and rigged for animation. Facial blend shapes baked from ZBrush for expressive performance.',
+        name:  'Gold Hunters',
+        tag:   'Environment',
+        year:  '2025',
+        tools: ['Blender', 'Roblox Studio', 'Substance Painter'],
+        desc:  'Environment created for our client, World Gold Council. Uses a mix of asset packs and created assets.',
         link:  null,
+        media: [
+          { type: 'image',  src: 'assets/images/gold-01.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gold-02.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gold-03.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/gold-04.jpg',            captionTitle: '', caption: '' },
+        ],
       },
       {
         name:  'Portfolio Site',
@@ -479,10 +801,44 @@
         tools: ['HTML', 'CSS', 'JavaScript'],
         desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
         link:  null,
+        media: [
+          { type: 'image',  src: 'assets/images/portfolio-01.jpg',       captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/portfolio-02.jpg',       captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/portfolio-03.jpg',       captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/portfolio-04.jpg',       captionTitle: '', caption: '' },
+        ],
+      },
+      {
+        name:  'LOreal Paris Catwalk',
+        tag:   'Environment',
+        year:  '2024/25',
+        tools: ['Blender', 'Roblox Studio'],
+        desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
+        link:  null,
+        media: [
+          { type: 'image',  src: 'assets/images/loreal-01.jpg',          captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/loreal-02.jpg',          captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/loreal-03.jpg',          captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/loreal-04.jpg',          captionTitle: '', caption: '' },
+        ],
+      },
+      {
+        name:  'Glamhattan',
+        tag:   'Environment',
+        year:  '2025',
+        tools: ['Blender', 'Roblox Studio'],
+        desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
+        link:  null,
+        media: [
+          { type: 'image',  src: 'assets/images/glamhattan-01.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/glamhattan-02.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/glamhattan-03.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/glamhattan-04.jpg',      captionTitle: '', caption: '' },
+        ],
       },
     ];
 
-    const TOTAL_SLOTS = 9;
+    const TOTAL_SLOTS = 12;
 
     const ICONS = {
       'Hard Surface': `
@@ -518,6 +874,8 @@
         </svg>`,
     };
 
+    // ── Grid ──────────────────────────────────────────────────────────────────
+
     function renderGrid() {
       const grid = document.getElementById('slotGrid');
 
@@ -532,26 +890,33 @@
           slot.setAttribute('aria-label', p.name);
         }
 
+        const iconContent = p && p.video
+          ? `<video src="${p.video}" autoplay loop muted playsinline></video>`
+          : (p ? ICONS[p.tag] || ICONS.empty : ICONS.empty);
+
         slot.innerHTML = `
-          <div class="slot-icon">${p ? ICONS[p.tag] || ICONS.empty : ICONS.empty}</div>
+          <div class="slot-icon">${iconContent}</div>
           <div class="slot-info">
             <div class="slot-name">${p ? p.name : '— Empty —'}</div>
             <div class="slot-tag">${p ? p.tag + ' &middot; ' + p.year : 'No data'}</div>
           </div>`;
 
         if (p) {
-          const activate = () => showDetail(i);
-          slot.addEventListener('mouseenter', activate);
-          slot.addEventListener('focus', activate);
-          slot.addEventListener('click', activate);
-          slot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') activate(); });
+          slot.addEventListener('mouseenter', () => showPreview(i));
+          slot.addEventListener('focus',      () => showPreview(i));
+          slot.addEventListener('click',      () => openProject(i));
+          slot.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') openProject(i);
+          });
         }
 
         grid.appendChild(slot);
       }
     }
 
-    function showDetail(index) {
+    // ── Hover Preview Panel ───────────────────────────────────────────────────
+
+    function showPreview(index) {
       const p = projects[index];
       if (!p) return;
 
@@ -559,12 +924,12 @@
         s.classList.toggle('active', i === index);
       });
 
-      const panel  = document.getElementById('detailPanel');
-      const idle   = document.getElementById('detailIdle');
-      const data   = document.getElementById('detailData');
+      const panel = document.getElementById('detailPanel');
+      const idle  = document.getElementById('detailIdle');
+      const data  = document.getElementById('detailData');
 
       panel.classList.add('populated');
-      idle.style.display  = 'none';
+      idle.style.display = 'none';
       data.classList.add('visible');
 
       data.innerHTML = `
@@ -588,6 +953,142 @@
             <div class="tag-list">${p.tools.map(t => `<span class="tag">${t}</span>`).join('')}</div>
           </div>
         </div>`;
+    }
+
+    // ── Full Project Detail ───────────────────────────────────────────────────
+
+    let currentProject = null;
+
+    function getMedia(p) {
+      if (p.media) return p.media;
+      const items = [];
+      if (p.video) items.push({ type: 'video', src: p.video, poster: null });
+      while (items.length < 4) items.push({ type: 'image', src: null });
+      return items;
+    }
+
+    function renderHeroContent(m) {
+      if (!m || !m.src) {
+        return `<div class="hero-placeholder"><span>NO SIGNAL</span></div>`;
+      }
+      if (m.type === 'video') {
+        return `<video class="hero-media" src="${m.src}" autoplay loop muted playsinline></video>`;
+      }
+      return `<img class="hero-media" src="${m.src}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-placeholder',innerHTML:'<span>NO SIGNAL</span>'}))">`;
+    }
+
+    function renderThumbContent(m, index) {
+      if (!m || !m.src) {
+        return `<span class="thumb-num">${String(index + 1).padStart(2, '0')}</span>`;
+      }
+      if (m.type === 'video') {
+        return m.poster
+          ? `<img src="${m.poster}" alt="">`
+          : `<span class="thumb-num">${String(index + 1).padStart(2, '0')}</span>`;
+      }
+      return `<img src="${m.src}" alt="">`;
+    }
+
+    function renderCaptionContent(m, index, total) {
+      const hasCaption = m && m.caption;
+      return `
+        <div class="caption-index">${String(index + 1).padStart(2, '0')} &nbsp;/&nbsp; ${String(total).padStart(2, '0')}</div>
+        ${m && m.captionTitle ? `<div class="caption-title">${m.captionTitle}</div>` : ''}
+        ${hasCaption
+          ? `<p class="caption-body">${m.caption}</p>`
+          : `<div class="caption-empty">No caption</div>`}`;
+    }
+
+    function buildDetailHTML(p) {
+      const media = getMedia(p);
+      return `
+        <div class="detail-inner">
+          <div class="detail-page-header">
+            <button class="back-btn" id="backBtn">&#9664;&nbsp;&nbsp;BACK</button>
+            <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
+          </div>
+
+          <div class="hero-layout">
+            <div class="detail-hero" id="detailHero">
+              ${renderHeroContent(media[0])}
+            </div>
+
+            <div class="detail-thumbs">
+              <div class="thumbs-strip">
+                ${media.map((m, i) => `
+                  <div class="thumb${i === 0 ? ' active' : ''}" data-index="${i}">
+                    ${renderThumbContent(m, i)}
+                  </div>`).join('')}
+              </div>
+            </div>
+
+            <div class="hero-caption" id="heroCaption">
+              ${renderCaptionContent(media[0], 0, media.length)}
+            </div>
+          </div>
+
+          <div class="detail-info-grid">
+            <div>
+              <div class="detail-label">Project</div>
+              <h2 class="detail-project-title">${p.name}</h2>
+              <p class="detail-desc">${p.desc}</p>
+              ${p.link ? `<a class="detail-link" href="${p.link}" target="_blank" rel="noopener">View Project &#9654;</a>` : ''}
+            </div>
+            <div class="meta-col">
+              <div>
+                <div class="detail-label">Category</div>
+                <div class="meta-value">${p.tag}</div>
+              </div>
+              <div>
+                <div class="detail-label">Year</div>
+                <div class="meta-value">${p.year}</div>
+              </div>
+              <div>
+                <div class="detail-label">Tools</div>
+                <div class="tag-list">${p.tools.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="detail-footer">
+            <div class="footer-text">&copy; 2026 Jake Walkden</div>
+            <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
+          </footer>
+        </div>`;
+    }
+
+    function selectMedia(index) {
+      const media = getMedia(currentProject);
+      document.getElementById('detailHero').innerHTML    = renderHeroContent(media[index]);
+      document.getElementById('heroCaption').innerHTML   = renderCaptionContent(media[index], index, media.length);
+      document.querySelectorAll('.thumb').forEach((t, i) => {
+        t.classList.toggle('active', i === index);
+      });
+    }
+
+    function openProject(index) {
+      const p = projects[index];
+      if (!p) return;
+      currentProject = p;
+
+      const overlay = document.getElementById('pageDetail');
+      overlay.innerHTML = buildDetailHTML(p);
+      overlay.scrollTop = 0;
+
+      overlay.querySelector('#backBtn').addEventListener('click', closeProject);
+      overlay.querySelectorAll('.thumb').forEach((thumb, i) => {
+        thumb.addEventListener('click', () => selectMedia(i));
+      });
+
+      document.getElementById('appWrap').classList.add('slide-out');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeProject() {
+      document.getElementById('appWrap').classList.remove('slide-out');
+      document.getElementById('pageDetail').classList.remove('open');
+      setTimeout(() => { document.body.style.overflow = ''; }, 450);
     }
 
     renderGrid();
