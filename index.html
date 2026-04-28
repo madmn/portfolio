@@ -379,20 +379,23 @@
     .detail-thumbs {
       grid-column: 1;
       grid-row: 2;
-    }
-
-    .thumbs-strip {
-      display: flex;
-      gap: 10px;
+      width: 100%;
+      min-width: 0;
       overflow-x: auto;
+      overflow-y: hidden;
       padding-bottom: 8px;
       scrollbar-width: thin;
       scrollbar-color: rgba(0, 255, 204, 0.25) transparent;
     }
 
-    .thumbs-strip::-webkit-scrollbar        { height: 3px; }
-    .thumbs-strip::-webkit-scrollbar-track  { background: transparent; }
-    .thumbs-strip::-webkit-scrollbar-thumb  { background: rgba(0, 255, 204, 0.25); }
+    .detail-thumbs::-webkit-scrollbar        { height: 3px; }
+    .detail-thumbs::-webkit-scrollbar-track  { background: transparent; }
+    .detail-thumbs::-webkit-scrollbar-thumb  { background: rgba(0, 255, 204, 0.25); }
+
+    .thumbs-strip {
+      display: flex;
+      gap: 10px;
+    }
 
     .thumb {
       width: 110px;
