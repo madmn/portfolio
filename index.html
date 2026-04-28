@@ -262,6 +262,35 @@
       cursor: zoom-in;
     }
 
+    .hero-video-wrap {
+      position: relative;
+      display: block;
+      line-height: 0;
+    }
+
+    .hero-play-btn {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      width: 40px;
+      height: 40px;
+      background: rgba(5, 10, 15, 0.85);
+      border: 1px solid var(--border);
+      color: var(--teal);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .hero-play-btn:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+    }
+
     /* ── Lightbox ── */
     #lightbox {
       position: fixed;
@@ -1203,7 +1232,11 @@
         return `<div class="hero-placeholder"><span>NO SIGNAL</span></div>`;
       }
       if (m.type === 'video') {
-        return `<video class="hero-media" src="${m.src}" autoplay loop muted playsinline></video>`;
+        return `
+          <div class="hero-video-wrap">
+            <video class="hero-media" src="${m.src}" muted playsinline loop></video>
+            <button class="hero-play-btn" aria-label="Play">&#9654;</button>
+          </div>`;
       }
       return `<img class="hero-media" src="${m.src}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-placeholder',innerHTML:'<span>NO SIGNAL</span>'}))">`;
     }
@@ -1389,10 +1422,10 @@
       const content = document.getElementById('lightboxContent');
 
       if (mediaEl.tagName === 'VIDEO') {
-        // Move the already-loaded video element — no re-download, no flash
         _lbVideo = mediaEl;
-        _lbVideoParent = mediaEl.parentNode;
+        _lbVideoParent = mediaEl.parentNode; // .hero-video-wrap
         content.appendChild(mediaEl);
+        mediaEl.play();
       } else {
         content.innerHTML = `<img src="${mediaEl.src}" alt="">`;
       }
@@ -1404,10 +1437,13 @@
       document.getElementById('lightbox').classList.remove('open');
 
       if (_lbVideo) {
-        // Move video back to where it came from
+        _lbVideo.pause();
         if (_lbVideoParent && document.contains(_lbVideoParent)) {
-          _lbVideoParent.appendChild(_lbVideo);
+          _lbVideoParent.prepend(_lbVideo); // restore before the play button
         }
+        // Reset play button to ▶
+        const btn = _lbVideoParent?.querySelector('.hero-play-btn');
+        if (btn) btn.innerHTML = '&#9654;';
         _lbVideo = null;
         _lbVideoParent = null;
       } else {
@@ -1416,6 +1452,15 @@
     }
 
     document.getElementById('pageDetail').addEventListener('click', e => {
+      const btn = e.target.closest('.hero-play-btn');
+      if (btn) {
+        const video = btn.closest('.hero-video-wrap')?.querySelector('video');
+        if (video) {
+          if (video.paused) { video.play();  btn.innerHTML = '&#9646;&#9646;'; }
+          else              { video.pause(); btn.innerHTML = '&#9654;'; }
+        }
+        return;
+      }
       const media = e.target.closest('.hero-media');
       if (media) openLightbox(media);
     });
