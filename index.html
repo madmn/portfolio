@@ -1419,33 +1419,60 @@
     let _lbVideoParent = null;
 
     function openLightbox(mediaEl) {
+      const lb      = document.getElementById('lightbox');
       const content = document.getElementById('lightboxContent');
 
       if (mediaEl.tagName === 'VIDEO') {
-        _lbVideo = mediaEl;
-        _lbVideoParent = mediaEl.parentNode; // .hero-video-wrap
+        // FLIP: record where the video is now
+        const fromRect = mediaEl.getBoundingClientRect();
+
+        _lbVideo       = mediaEl;
+        _lbVideoParent = mediaEl.parentNode;
         content.appendChild(mediaEl);
-        mediaEl.play();
+
+        // After layout settles, calculate the delta and animate from there
+        requestAnimationFrame(() => {
+          const toRect = mediaEl.getBoundingClientRect();
+          const dx     = (fromRect.left + fromRect.width  / 2) - (toRect.left + toRect.width  / 2);
+          const dy     = (fromRect.top  + fromRect.height / 2) - (toRect.top  + toRect.height / 2);
+          const scaleX = fromRect.width  / toRect.width;
+          const scaleY = fromRect.height / toRect.height;
+
+          mediaEl.style.transition = 'none';
+          mediaEl.style.transform  = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+
+          requestAnimationFrame(() => {
+            mediaEl.style.transition = 'transform 0.42s cubic-bezier(0.4, 0, 0.2, 1)';
+            mediaEl.style.transform  = '';
+            mediaEl.play();
+          });
+        });
+
       } else {
         content.innerHTML = `<img src="${mediaEl.src}" alt="">`;
       }
 
-      document.getElementById('lightbox').classList.add('open');
+      lb.classList.add('open');
     }
 
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
 
       if (_lbVideo) {
-        _lbVideo.pause();
-        if (_lbVideoParent && document.contains(_lbVideoParent)) {
-          _lbVideoParent.prepend(_lbVideo); // restore before the play button
-        }
-        // Reset play button to ▶
-        const btn = _lbVideoParent?.querySelector('.hero-play-btn');
-        if (btn) btn.innerHTML = '&#9654;';
+        const v = _lbVideo, p = _lbVideoParent;
         _lbVideo = null;
         _lbVideoParent = null;
+
+        // Wait for backdrop fade then restore video quietly
+        setTimeout(() => {
+          v.style.transition = '';
+          v.style.transform  = '';
+          v.pause();
+          if (p && document.contains(p)) p.prepend(v);
+          const btn = p?.querySelector('.hero-play-btn');
+          if (btn) btn.innerHTML = '&#9654;';
+        }, 220);
+
       } else {
         document.getElementById('lightboxContent').innerHTML = '';
       }
