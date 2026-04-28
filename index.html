@@ -268,14 +268,18 @@
       inset: 0;
       background: rgba(5, 10, 15, 0.96);
       z-index: 200;
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
       cursor: zoom-out;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
     }
 
     #lightbox.open {
-      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     #lightboxClose {
@@ -1367,19 +1371,37 @@
 
     // ── Lightbox ──────────────────────────────────────────────────────────────
 
+    let _lbVideo = null;
+    let _lbVideoParent = null;
+
     function openLightbox(mediaEl) {
       const content = document.getElementById('lightboxContent');
+
       if (mediaEl.tagName === 'VIDEO') {
-        content.innerHTML = `<video src="${mediaEl.src}" autoplay loop muted playsinline></video>`;
+        // Move the already-loaded video element — no re-download, no flash
+        _lbVideo = mediaEl;
+        _lbVideoParent = mediaEl.parentNode;
+        content.appendChild(mediaEl);
       } else {
         content.innerHTML = `<img src="${mediaEl.src}" alt="">`;
       }
+
       document.getElementById('lightbox').classList.add('open');
     }
 
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
-      document.getElementById('lightboxContent').innerHTML = '';
+
+      if (_lbVideo) {
+        // Move video back to where it came from
+        if (_lbVideoParent && document.contains(_lbVideoParent)) {
+          _lbVideoParent.appendChild(_lbVideo);
+        }
+        _lbVideo = null;
+        _lbVideoParent = null;
+      } else {
+        document.getElementById('lightboxContent').innerHTML = '';
+      }
     }
 
     document.getElementById('pageDetail').addEventListener('click', e => {
