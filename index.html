@@ -226,11 +226,64 @@
       max-height: 75vh;
       display: block;
       object-fit: contain;
+      cursor: zoom-in;
     }
 
-    video.hero-media {
-      filter: drop-shadow(0 0 20px rgba(0, 171, 12, 0.45));
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 10, 15, 0.96);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
     }
+
+    #lightbox.open {
+      display: flex;
+    }
+
+    #lightboxClose {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 14px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    #lightboxClose:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    #lightboxContent {
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+
+    #lightboxContent img,
+    #lightboxContent video {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      display: block;
+    }
+
 
     /* ── Caption Panel ── */
     .hero-caption {
@@ -701,6 +754,19 @@
       letter-spacing: 0.4px;
     }
 
+    .detail-desc a {
+      color: var(--teal);
+      text-decoration: none;
+      
+      .detail-desc a:visited {
+  color: var(--teal);
+    }
+
+      .detail-desc a:hover {
+      text-decoration: underline;
+    }
+    }
+
     .detail-link {
       display: inline-block;
       margin-top: 18px;
@@ -820,6 +886,11 @@
 
   <div id="pageDetail"></div>
 
+  <div id="lightbox">
+    <button id="lightboxClose">&#10005;</button>
+    <div id="lightboxContent"></div>
+  </div>
+
   <script>
     const projects = [
       {
@@ -831,11 +902,12 @@
         link:  null,
         video: 'assets/videos/helmet-turnaround.webm',
         media: [
-          { type: 'video',  src: 'assets/videos/helmet-turnaround.webm', poster: null, captionTitle: 'M1 Helmet', caption: 'Rigid accessory created for the roblox platform. Created in Blender, textured with photoshop and Substance Painter. Camo pattern hand painted by myself in Photoshop.' },
-          { type: 'image',  src: 'assets/images/ugc-02.jpg',             captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/ugc-03.jpg',             captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/ugc-04.jpg',             captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/ugc-04.jpg',             captionTitle: '', caption: '' },
+          { type: 'video',  src: 'assets/videos/m1wire.webm', poster: null, captionTitle: 'M1 Helmet // 1,204 Triangles', caption: 'This is a personal piece I created. Rigid accessory for the roblox platform. The camo pattern was hand painted by myself in Photoshop. I wanted to get an authentic look from the Mitchell camo, whilst also still fitting into the roblox style.' },
+          { type: 'video',  src: 'assets/videos/ecb-ugc.webm',             captionTitle: 'ECB Bucket Hat // 3,554 triangles', caption: 'This hat was created for our client ECB. I recieved a concept for an item where they wanted the colours to change in certain areas. The roblox platform is very limited in what you can do with UGC, rigid espeically. I had the idea to try a lenticular effect, and it turned out great. It does hike up the triangle count, but it is very effective. This was given away as free UGC as part of an in game reward system.' },
+          { type: 'image',  src: 'assets/images/maybeugc-1.png',             captionTitle: 'Maybelline Jacket // 1,833 Triangles', caption: 'This was the first concepted item for Maybelline. They wanted a layered clothing jacket that featured their bubble style whilst being cute enough to wear regularly. This was a very popular item for players. This was given away as free UGC as part of an in game reward system.' },
+          { type: 'image',  src: 'assets/images/maybeugc-2.png',             captionTitle: 'Maybelline Dog Bag // 3,596 triangles', caption: 'This is the second UGC created for our client, Maybelline. The exact eyelashes were a must, so it throws the tri count up a chunk, but they were very happy with the end product. This was given away as free UGC as part of an in game reward system.' },
+          { type: 'image',  src: 'assets/images/maybeugc-3.png',             captionTitle: 'Maybelline Keychain // 3,902 triangles', caption: '' },
+          { type: 'image',  src: 'assets/images/wgcugc-1.png',             captionTitle: 'WGC JEEP // 3,968 triangles', caption: 'This item was created for our client, World Gold Council. This was a top tier UGC reward within the game.' },
         ],
       },
       {
@@ -907,7 +979,7 @@
         tag:   'Generalist',
         year:  '2025',
         tools: ['Blender', 'Roblox Studio'],
-        desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
+        desc:  'Vist the game page <a href="https://www.roblox.com/games/80951765302134/Glamhattan-Clicker-by-Maybelline" target="blank" rel="noopener">here</a>',
         link:  null,
         video: 'assets/videos/maybe-turnaround.webm',
         media: [
@@ -1015,7 +1087,9 @@
 
         if (p) {
           slot.addEventListener('mouseenter', () => showPreview(i));
+          slot.addEventListener('mouseleave', () => slot.classList.remove('active'));
           slot.addEventListener('focus',      () => showPreview(i));
+          slot.addEventListener('blur',       () => slot.classList.remove('active'));
           slot.addEventListener('click',      () => openProject(i));
           slot.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') openProject(i);
@@ -1095,9 +1169,7 @@
         return `<span class="thumb-num">${String(index + 1).padStart(2, '0')}</span>`;
       }
       if (m.type === 'video') {
-        return m.poster
-          ? `<img src="${m.poster}" alt="">`
-          : `<span class="thumb-num">${String(index + 1).padStart(2, '0')}</span>`;
+        return `<video src="${m.src}" preload="metadata" muted playsinline></video>`;
       }
       return `<img src="${m.src}" alt="">`;
     }
@@ -1198,6 +1270,13 @@
       overlay.querySelectorAll('.thumb').forEach((thumb, i) => {
         thumb.addEventListener('click', () => selectMedia(i));
       });
+
+      overlay.querySelectorAll('.thumb video').forEach(v => {
+        const seek = () => { v.currentTime = 0.01; };
+        if (v.readyState >= 1) seek();
+        else v.addEventListener('loadedmetadata', seek, { once: true });
+      });
+
       const prevBtn = overlay.querySelector('#prevProject');
       const nextBtn = overlay.querySelector('#nextProject');
       if (prevBtn) prevBtn.addEventListener('click', () => openProject(index - 1, 'prev'));
@@ -1245,6 +1324,38 @@
     }
 
     renderGrid();
+
+    // ── Lightbox ──────────────────────────────────────────────────────────────
+
+    function openLightbox(mediaEl) {
+      const content = document.getElementById('lightboxContent');
+      if (mediaEl.tagName === 'VIDEO') {
+        content.innerHTML = `<video src="${mediaEl.src}" autoplay loop muted playsinline></video>`;
+      } else {
+        content.innerHTML = `<img src="${mediaEl.src}" alt="">`;
+      }
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.getElementById('lightboxContent').innerHTML = '';
+    }
+
+    document.getElementById('pageDetail').addEventListener('click', e => {
+      const media = e.target.closest('.hero-media');
+      if (media) openLightbox(media);
+    });
+
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (!e.target.closest('#lightboxContent')) closeLightbox();
+    });
+
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
   </script>
 </body>
 </html>
