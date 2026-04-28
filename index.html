@@ -1287,12 +1287,23 @@
     }
 
     function selectMedia(index) {
-      const media = getMedia(currentProject);
-      document.getElementById('detailHero').innerHTML    = renderHeroContent(media[index]);
-      document.getElementById('heroCaption').innerHTML   = renderCaptionContent(media[index], index, media.length);
+      const media    = getMedia(currentProject);
+      const hero     = document.getElementById('detailHero');
+      const scroller = document.querySelector('.detail-inner');
+      const scrollY  = scroller ? scroller.scrollTop : 0;
+
+      // Lock hero height so the layout doesn't collapse during the swap
+      if (hero) hero.style.minHeight = hero.offsetHeight + 'px';
+
+      hero.innerHTML = renderHeroContent(media[index]);
+      document.getElementById('heroCaption').innerHTML = renderCaptionContent(media[index], index, media.length);
       document.querySelectorAll('.thumb').forEach((t, i) => {
         t.classList.toggle('active', i === index);
       });
+
+      // Restore scroll position then release the height lock
+      if (scroller) scroller.scrollTop = scrollY;
+      setTimeout(() => { if (hero) hero.style.minHeight = ''; }, 150);
     }
 
     function buildNavHTML(index) {
