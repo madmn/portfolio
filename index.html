@@ -8,13 +8,13 @@
     :root {
       --bg:           #050a0f;
       --bg-slot:      #0a1520;
-      --teal:         #0fac3e;
-      --teal-glow:    rgba(9, 255, 0, 0.2);
+      --green:         #0fac3e;
+      --green-glow:    rgba(9, 255, 0, 0.2);
       --accent:       #00eeff;
       --text:         #c0e0c1;
       --text-dim:     #4a7a6a;
-      --border:       rgba(0, 255, 204, 0.2);
-      --border-hot:   rgba(0, 255, 204, 0.7);
+      --border:       rgba(15, 172, 62, 0.2);
+      --border-hot:   rgba(15, 172, 62, 0.7);
     }
 
     *, *::before, *::after {
@@ -81,7 +81,7 @@
       transform: translateY(-50%);
       background: rgba(5, 10, 15, 0.85);
       border: 1px solid var(--border);
-      color: var(--teal);
+      color: var(--green);
       font-family: inherit;
       cursor: pointer;
       z-index: 10;
@@ -94,8 +94,8 @@
     }
 
     .project-nav:hover {
-      border-color: var(--teal);
-      box-shadow: 0 0 14px rgba(0, 255, 204, 0.2);
+      border-color: var(--green);
+      box-shadow: 0 0 14px rgba(15, 172, 62, 0.2);
     }
 
     .project-nav.prev { left: 0; }
@@ -154,7 +154,7 @@
     .back-btn {
       background: none;
       border: 1px solid var(--border);
-      color: var(--teal);
+      color: var(--green);
       font-family: inherit;
       font-size: 11px;
       letter-spacing: 3px;
@@ -165,8 +165,8 @@
     }
 
     .back-btn:hover {
-      border-color: var(--teal);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      border-color: var(--green);
+      box-shadow: 0 0 10px rgba(15, 172, 62, 0.2);
     }
 
     /* ── Hero Layout ── */
@@ -221,13 +221,13 @@
     .detail-hero {
       grid-column: 1;
       grid-row: 1;
-      background: #020810;
+      background: #02081000;
     }
 
     .hero-placeholder {
       width: 100%;
       aspect-ratio: 16 / 9;
-      border: 1px dashed rgba(0, 255, 204, 0.2);
+      border: 1px dashed rgba(15, 172, 62, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -256,7 +256,7 @@
     .hero-media {
       width: 100%;
       height: auto;
-      max-height: 75vh;
+      max-height: 50vh;
       display: block;
       object-fit: contain;
       cursor: pointer;
@@ -273,7 +273,15 @@
     }
 
     .hero-video-wrap:hover video.hero-media {
-      filter: drop-shadow(0 0 22px rgba(0, 255, 204, 0.5));
+      filter: drop-shadow(0 0 22px rgba(15, 172, 62, 0.5));
+    }
+
+    img.hero-media {
+      transition: filter 0.3s ease;
+    }
+
+    img.hero-media:hover {
+      filter: drop-shadow(0 0 22px rgba(15, 172, 62, 0.5));
     }
 
     .hero-play-btn {
@@ -284,7 +292,7 @@
       height: 40px;
       background: rgba(5, 10, 15, 0.85);
       border: 1px solid var(--border);
-      color: var(--teal);
+      color: var(--green);
       font-size: 13px;
       cursor: pointer;
       display: flex;
@@ -295,8 +303,8 @@
     }
 
     .hero-play-btn:hover {
-      border-color: var(--teal);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+      border-color: var(--green);
+      box-shadow: 0 0 10px rgba(15, 172, 62, 0.3);
     }
 
     /* ── Lightbox ── */
@@ -337,8 +345,8 @@
     }
 
     #lightboxClose:hover {
-      border-color: var(--teal);
-      color: var(--teal);
+      border-color: var(--green);
+      color: var(--green);
     }
 
     #lightboxContent {
@@ -384,7 +392,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
     }
 
     .caption-index {
@@ -399,7 +407,7 @@
     .caption-title {
       font-size: 13px;
       letter-spacing: 2px;
-      color: var(--teal);
+      color: var(--green);
       text-transform: uppercase;
     }
 
@@ -419,7 +427,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px dashed rgba(0, 255, 204, 0.12);
+      border: 1px dashed rgba(15, 172, 62, 0.12);
     }
 
     /* ── Thumbnail Strip ── */
@@ -432,12 +440,12 @@
       overflow-y: hidden;
       padding-bottom: 8px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(0, 255, 204, 0.25) transparent;
+      scrollbar-color: rgba(15, 172, 62, 0.25) transparent;
     }
 
     .detail-thumbs::-webkit-scrollbar        { height: 3px; }
     .detail-thumbs::-webkit-scrollbar-track  { background: transparent; }
-    .detail-thumbs::-webkit-scrollbar-thumb  { background: rgba(0, 255, 204, 0.25); }
+    .detail-thumbs::-webkit-scrollbar-thumb  { background: rgba(15, 172, 62, 0.25); }
 
     .thumbs-strip {
       display: flex;
@@ -449,7 +457,7 @@
       aspect-ratio: 1;
       flex-shrink: 0;
       background: #020810;
-      border: 1px dashed rgba(0, 255, 204, 0.2);
+      border: 1px dashed rgba(15, 172, 62, 0.2);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -473,8 +481,8 @@
       pointer-events: none;
     }
 
-    .thumb:hover       { border-color: rgba(0, 255, 204, 0.5); }
-    .thumb.active      { border: 1px solid var(--teal); box-shadow: 0 0 10px rgba(0, 255, 204, 0.25); }
+    .thumb:hover       { border-color: rgba(15, 172, 62, 0.5); }
+    .thumb.active      { border: 1px solid var(--green); box-shadow: 0 0 10px rgba(15, 172, 62, 0.25); }
 
     .thumb-num {
       font-size: 10px;
@@ -506,10 +514,10 @@
     .detail-project-title {
       font-size: clamp(22px, 2.8vw, 44px);
       font-weight: normal;
-      color: var(--teal);
+      color: var(--green);
       letter-spacing: 4px;
       text-transform: uppercase;
-      text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+      text-shadow: 0 0 20px rgba(15, 172, 62, 0.4);
       margin-bottom: 16px;
     }
 
@@ -555,17 +563,17 @@
     h1 {
       font-size: clamp(24px, 3vw, 48px);
       font-weight: normal;
-      color: var(--teal);
+      color: var(--green);
       letter-spacing: 5px;
       text-transform: uppercase;
-      text-shadow: 0 0 20px rgba(0, 255, 204, 0.6), 0 0 50px rgba(0, 255, 204, 0.2);
+      text-shadow: 0 0 20px rgba(15, 172, 62, 0.6), 0 0 50px rgba(15, 172, 62, 0.2);
     }
 
     .cursor {
       display: inline-block;
       width: clamp(10px, 1.2vw, 18px);
       height: 1.1em;
-      background: var(--teal);
+      background: var(--green);
       vertical-align: bottom;
       margin-left: 6px;
       animation: blink 1.2s step-end infinite;
@@ -604,15 +612,15 @@
     .bar-track {
       width: clamp(120px, 12vw, 200px);
       height: 6px;
-      background: rgba(0, 255, 204, 0.08);
+      background: rgba(15, 172, 62, 0.08);
       border: 1px solid var(--border);
     }
 
     .bar-fill {
       width: 67%;
       height: 100%;
-      background: var(--teal);
-      box-shadow: 0 0 6px rgba(0, 255, 204, 0.9);
+      background: var(--green);
+      box-shadow: 0 0 6px rgba(15, 172, 62, 0.9);
     }
 
     /* ── Grid ── */
@@ -656,18 +664,18 @@
     .slot:focus-visible,
     .slot.active {
       border-color: var(--border-hot);
-      background: rgba(0, 255, 204, 0.04);
-      box-shadow: 0 0 18px rgba(0, 255, 204, 0.18), inset 0 0 18px rgba(0, 255, 204, 0.04);
+      background: rgba(15, 172, 62, 0.04);
+      box-shadow: 0 0 18px rgba(15, 172, 62, 0.18), inset 0 0 18px rgba(15, 172, 62, 0.04);
     }
 
     .slot.active {
-      border-color: var(--teal);
+      border-color: var(--green);
       animation: slot-pulse 2.5s ease-in-out infinite;
     }
 
     @keyframes slot-pulse {
-      0%, 100% { box-shadow: 0 0 18px rgba(0, 255, 204, 0.18), inset 0 0 18px rgba(0, 255, 204, 0.04); }
-      50%       { box-shadow: 0 0 30px rgba(0, 255, 204, 0.32), inset 0 0 28px rgba(0, 255, 204, 0.08); }
+      0%, 100% { box-shadow: 0 0 18px rgba(15, 172, 62, 0.18), inset 0 0 18px rgba(15, 172, 62, 0.04); }
+      50%       { box-shadow: 0 0 30px rgba(15, 172, 62, 0.32), inset 0 0 28px rgba(15, 172, 62, 0.08); }
     }
 
     .slot-icon {
@@ -731,7 +739,7 @@
     .slot-name {
       font-size: 12px;
       letter-spacing: 2px;
-      color: var(--teal);
+      color: var(--green);
       text-transform: uppercase;
       white-space: nowrap;
       overflow: hidden;
@@ -742,7 +750,7 @@
     .slot:hover .slot-name,
     .slot:focus-visible .slot-name,
     .slot.active .slot-name {
-      text-shadow: 0 0 8px rgba(0, 255, 204, 0.7);
+      text-shadow: 0 0 8px rgba(15, 172, 62, 0.7);
     }
 
     .slot-tag {
@@ -771,7 +779,7 @@
     }
 
     .detail-panel.populated {
-      border-color: rgba(0, 255, 204, 0.35);
+      border-color: rgba(15, 172, 62, 0.35);
     }
 
     .detail-panel::before {
@@ -779,7 +787,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -827,10 +835,10 @@
 
     .detail-title {
       font-size: clamp(20px, 2.2vw, 34px);
-      color: var(--teal);
+      color: var(--green);
       letter-spacing: 4px;
       text-transform: uppercase;
-      text-shadow: 0 0 14px rgba(0, 255, 204, 0.5);
+      text-shadow: 0 0 14px rgba(15, 172, 62, 0.5);
       margin-bottom: 14px;
     }
 
@@ -842,11 +850,11 @@
     }
 
     .detail-desc a {
-      color: var(--teal);
+      color: var(--green);
       text-decoration: none;
       
       .detail-desc a:visited {
-  color: var(--teal);
+  color: var(--green);
     }
 
       .detail-desc a:hover {
@@ -894,9 +902,9 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       padding: 4px 10px;
-      border: 1px solid rgba(0, 255, 204, 0.28);
-      color: var(--teal);
-      background: rgba(0, 255, 204, 0.05);
+      border: 1px solid rgba(15, 172, 62, 0.28);
+      color: var(--green);
+      background: rgba(15, 172, 62, 0.05);
     }
 
     /* ── Footer ── */
@@ -923,14 +931,14 @@
     .contact-link {
       font-size: 11px;
       letter-spacing: 2px;
-      color: var(--teal);
+      color: var(--green);
       text-decoration: none;
       text-transform: uppercase;
       transition: text-shadow 0.2s;
     }
 
     .contact-link:hover {
-      text-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+      text-shadow: 0 0 8px rgba(15, 172, 62, 0.8);
     }
   </style>
 </head>
@@ -1114,34 +1122,34 @@
     const ICONS = {
       'Hard Surface': `
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="28,8 48,44 8,44" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
-          <polygon points="28,18 40,40 16,40" stroke="#00ffcc" stroke-width="0.8" stroke-dasharray="3,2" fill="none"/>
-          <line x1="28" y1="8" x2="28" y2="18" stroke="#00ffcc" stroke-width="0.8"/>
+          <polygon points="28,8 48,44 8,44" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
+          <polygon points="28,18 40,40 16,40" stroke="#0fac3e" stroke-width="0.8" stroke-dasharray="3,2" fill="none"/>
+          <line x1="28" y1="8" x2="28" y2="18" stroke="#0fac3e" stroke-width="0.8"/>
         </svg>`,
       'Environment': `
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="26" width="36" height="22" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
-          <polyline points="10,26 28,10 46,26" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
-          <rect x="22" y="34" width="12" height="14" stroke="#00ffcc" stroke-width="0.8" fill="none"/>
+          <rect x="10" y="26" width="36" height="22" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
+          <polyline points="10,26 28,10 46,26" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
+          <rect x="22" y="34" width="12" height="14" stroke="#0fac3e" stroke-width="0.8" fill="none"/>
         </svg>`,
       'Character': `
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="28" cy="18" r="9" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
-          <path d="M13 48 Q13 32 28 32 Q43 32 43 48" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
+          <circle cx="28" cy="18" r="9" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
+          <path d="M13 48 Q13 32 28 32 Q43 32 43 48" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
         </svg>`,
       'Web Dev': `
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="6" y="12" width="44" height="32" rx="2" stroke="#00ffcc" stroke-width="1.4" fill="none"/>
-          <line x1="6" y1="22" x2="50" y2="22" stroke="#00ffcc" stroke-width="0.9"/>
-          <rect x="12" y="28" width="14" height="10" stroke="#00ffcc" stroke-width="0.8" fill="none"/>
-          <line x1="32" y1="30" x2="44" y2="30" stroke="#00ffcc" stroke-width="0.8"/>
-          <line x1="32" y1="35" x2="40" y2="35" stroke="#00ffcc" stroke-width="0.8"/>
+          <rect x="6" y="12" width="44" height="32" rx="2" stroke="#0fac3e" stroke-width="1.4" fill="none"/>
+          <line x1="6" y1="22" x2="50" y2="22" stroke="#0fac3e" stroke-width="0.9"/>
+          <rect x="12" y="28" width="14" height="10" stroke="#0fac3e" stroke-width="0.8" fill="none"/>
+          <line x1="32" y1="30" x2="44" y2="30" stroke="#0fac3e" stroke-width="0.8"/>
+          <line x1="32" y1="35" x2="40" y2="35" stroke="#0fac3e" stroke-width="0.8"/>
         </svg>`,
       empty: `
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="16" y="16" width="24" height="24" stroke="#00ffcc" stroke-width="1" stroke-dasharray="3,3"/>
-          <line x1="16" y1="16" x2="40" y2="40" stroke="#00ffcc" stroke-width="0.8"/>
-          <line x1="40" y1="16" x2="16" y2="40" stroke="#00ffcc" stroke-width="0.8"/>
+          <rect x="16" y="16" width="24" height="24" stroke="#0fac3e" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="16" y1="16" x2="40" y2="40" stroke="#0fac3e" stroke-width="0.8"/>
+          <line x1="40" y1="16" x2="16" y2="40" stroke="#0fac3e" stroke-width="0.8"/>
         </svg>`,
     };
 
@@ -1248,8 +1256,8 @@
       if (m.type === 'video') {
         return `
           <div class="hero-video-wrap">
-            <video class="hero-media" src="${m.src}" muted playsinline loop></video>
-            <button class="hero-play-btn" aria-label="Play">&#9654;</button>
+            <video class="hero-media" src="${m.src}" autoplay muted playsinline loop></video>
+            <button class="hero-play-btn" aria-label="Pause">&#9646;&#9646;</button>
           </div>`;
       }
       return `<img class="hero-media" src="${m.src}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-placeholder',innerHTML:'<span>NO SIGNAL</span>'}))">`;
