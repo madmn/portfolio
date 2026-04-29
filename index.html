@@ -216,9 +216,10 @@
         padding-bottom: 16px;
       }
 
-      /* Nav arrows — keep position:absolute (fixed breaks inside transformed parent)
-         Move to bottom corners of #pageDetail which is viewport-sized */
+      /* Arrows fixed to bottom corners — position:fixed inside #pageDetail
+         works because #pageDetail has transform, making it the containing block */
       .project-nav {
+        position: fixed;
         top: auto;
         bottom: 0;
         transform: none;
@@ -226,11 +227,12 @@
         padding: 14px 22px;
         gap: 8px;
         border-bottom: none;
+        border-radius: 0;
+        z-index: 200;
       }
 
-      .project-nav { position: fixed; top: auto; bottom: 0; transform: none; }
-      .project-nav.prev { left: 0; border-left: none; }
-      .project-nav.next { right: 0; border-right: none; }
+      .project-nav.prev { left: 0; border-left: none; border-right: 1px solid var(--border); }
+      .project-nav.next { right: 0; border-right: none; border-left: 1px solid var(--border); }
 
       .nav-label { display: none; }
     }
@@ -1450,7 +1452,7 @@
       loadProjectContent(overlay, index, null);
 
       if (!alreadyOpen) {
-        const headerH = document.querySelector('header')?.offsetHeight ?? 0;
+        const headerH = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0;
         overlay.style.top = headerH + 'px';
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
