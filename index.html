@@ -31,19 +31,12 @@
       overflow-x: hidden;
     }
 
-    /* ── Page Transition ── */
     #appWrap {
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       padding: clamp(32px, 5vh, 72px) clamp(20px, 4vw, 64px) 80px;
-      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-    }
-
-    #appWrap.slide-out {
-      transform: translateX(-100%);
     }
 
     /* ── Detail Overlay ── */
@@ -72,7 +65,26 @@
       overflow-y: auto;
       height: 100%;
       padding: clamp(32px, 5vh, 72px) clamp(20px, 4vw, 64px) 80px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(15, 172, 62, 0.3) transparent;
     }
+
+    .detail-inner::-webkit-scrollbar        { width: 4px; }
+    .detail-inner::-webkit-scrollbar-track  { background: transparent; }
+    .detail-inner::-webkit-scrollbar-thumb  { background: rgba(15, 172, 62, 0.3); border-radius: 2px; }
+    .detail-inner::-webkit-scrollbar-thumb:hover { background: rgba(15, 172, 62, 0.6); }
+
+    /* Global scrollbar for main page */
+    html {
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(15, 172, 62, 0.3) transparent;
+    }
+
+    html::-webkit-scrollbar        { width: 4px; }
+    html::-webkit-scrollbar-track  { background: transparent; }
+    html::-webkit-scrollbar-thumb  { background: rgba(15, 172, 62, 0.3); border-radius: 2px; }
+    html::-webkit-scrollbar-thumb:hover { background: rgba(15, 172, 62, 0.6); }
 
     /* ── Project Nav Arrows ── */
     .project-nav {
@@ -98,8 +110,8 @@
       box-shadow: 0 0 14px rgba(15, 172, 62, 0.2);
     }
 
-    .project-nav.prev { left: 0; }
-    .project-nav.next { right: 0; }
+    .project-nav.prev { left: -48px; }
+    .project-nav.next { right: -48px; }
 
     .nav-arrow { font-size: 14px; }
 
@@ -141,6 +153,10 @@
 
     /* ── Detail Page Header ── */
     .detail-page-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
       width: 100%;
       max-width: 1400px;
       display: flex;
@@ -171,6 +187,7 @@
 
     /* ── Hero Layout ── */
     .hero-layout {
+      position: relative;
       width: 100%;
       max-width: 1400px;
       display: grid;
@@ -211,6 +228,7 @@
         border-bottom: none;
       }
 
+      .project-nav { position: fixed; top: auto; bottom: 0; transform: none; }
       .project-nav.prev { left: 0; border-left: none; }
       .project-nav.next { right: 0; border-right: none; }
 
@@ -537,6 +555,10 @@
 
     /* ── Header ── */
     header {
+      position: sticky;
+      top: 0;
+      z-index: 150;
+      background: var(--bg);
       width: 100%;
       max-width: 1400px;
       margin-bottom: clamp(32px, 4vh, 56px);
@@ -1283,16 +1305,27 @@
           : `<div class="caption-empty">No caption</div>`}`;
     }
 
-    function buildDetailHTML(p) {
+    function buildDetailHTML(p, index) {
       const media = getMedia(p);
+      const prev  = projects[index - 1];
+      const next  = projects[index + 1];
       return `
         <div class="detail-inner">
           <div class="detail-page-header">
-            <button class="back-btn" id="backBtn">&#9664;&nbsp;&nbsp;BACK</button>
+            <button class="back-btn" id="backBtn">&#9664;&nbsp;&nbsp;EXIT</button>
             <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
           </div>
 
           <div class="hero-layout">
+            ${prev ? `<button class="project-nav prev" id="prevProject">
+              <span class="nav-arrow">&#9664;</span>
+              <span class="nav-label">${prev.name}</span>
+            </button>` : ''}
+            ${next ? `<button class="project-nav next" id="nextProject">
+              <span class="nav-arrow">&#9654;</span>
+              <span class="nav-label">${next.name}</span>
+            </button>` : ''}
+
             <div class="detail-hero" id="detailHero">
               ${renderHeroContent(media[0])}
             </div>
@@ -1347,8 +1380,7 @@
       const scroller = document.querySelector('.detail-inner');
       const scrollY  = scroller ? scroller.scrollTop : 0;
 
-      // Lock hero height so the layout doesn't collapse during the swap
-      if (hero) hero.style.minHeight = hero.offsetHeight + 'px';
+      hero.style.minHeight = hero.offsetHeight + 'px';
 
       hero.innerHTML = renderHeroContent(media[index]);
       document.getElementById('heroCaption').innerHTML = renderCaptionContent(media[index], index, media.length);
@@ -1356,24 +1388,21 @@
         t.classList.toggle('active', i === index);
       });
 
-      // Restore scroll position then release the height lock
-      if (scroller) scroller.scrollTop = scrollY;
-      setTimeout(() => { if (hero) hero.style.minHeight = ''; }, 150);
+      requestAnimationFrame(() => { if (scroller) scroller.scrollTop = scrollY; });
+
+      // Release height lock once new media has its dimensions
+      const release = () => { hero.style.minHeight = ''; };
+      const el = hero.querySelector('video, img');
+      if (!el) {
+        release();
+      } else if (el.tagName === 'VIDEO') {
+        el.addEventListener('loadedmetadata', release, { once: true });
+        setTimeout(release, 800); // fallback
+      } else {
+        el.complete ? release() : el.addEventListener('load', release, { once: true });
+      }
     }
 
-    function buildNavHTML(index) {
-      const prev = projects[index - 1];
-      const next = projects[index + 1];
-      return `
-        ${prev ? `<button class="project-nav prev" id="prevProject">
-          <span class="nav-arrow">&#9664;</span>
-          <span class="nav-label">${prev.name}</span>
-        </button>` : ''}
-        ${next ? `<button class="project-nav next" id="nextProject">
-          <span class="nav-arrow">&#9654;</span>
-          <span class="nav-label">${next.name}</span>
-        </button>` : ''}`;
-    }
 
     function wireDetailEvents(overlay, index) {
       overlay.querySelector('#backBtn').addEventListener('click', closeProject);
@@ -1396,7 +1425,7 @@
     function loadProjectContent(overlay, index, enterClass) {
       currentProject      = projects[index];
       currentProjectIndex = index;
-      overlay.innerHTML   = buildNavHTML(index) + buildDetailHTML(currentProject);
+      overlay.innerHTML   = buildDetailHTML(currentProject, index);
       overlay.scrollTop   = 0;
       if (enterClass) overlay.querySelector('.detail-inner').classList.add(enterClass);
       wireDetailEvents(overlay, index);
@@ -1421,26 +1450,24 @@
       loadProjectContent(overlay, index, null);
 
       if (!alreadyOpen) {
-        document.getElementById('appWrap').classList.add('slide-out');
+        const headerH = document.querySelector('header')?.offsetHeight ?? 0;
+        overlay.style.top = headerH + 'px';
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
     }
 
     function closeProject() {
-      document.getElementById('appWrap').classList.remove('slide-out');
       document.getElementById('pageDetail').classList.remove('open');
       setTimeout(() => { document.body.style.overflow = ''; }, 450);
     }
 
-    // Play all slot-icon videos simultaneously once every one is buffered
     function initSlotVideos() {
-      const videos = [...document.querySelectorAll('.slot-icon video')];
+      const videos = document.querySelectorAll('.slot-icon video');
       if (!videos.length) return;
       let ready = 0;
       const checkAll = () => {
-        ready++;
-        if (ready === videos.length) videos.forEach(v => v.play().catch(() => {}));
+        if (++ready === videos.length) videos.forEach(v => v.play().catch(() => {}));
       };
       videos.forEach(v => {
         if (v.readyState >= 3) checkAll();
