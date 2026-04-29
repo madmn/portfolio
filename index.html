@@ -1192,7 +1192,7 @@
         }
 
         const iconContent = p && p.video
-          ? `<video src="${p.video}" preload="auto" loop muted playsinline></video>`
+          ? `<video src="${p.video}" autoplay loop muted playsinline></video>`
           : (p ? ICONS[p.tag] || ICONS.empty : ICONS.empty);
 
         slot.innerHTML = `
@@ -1462,21 +1462,7 @@
       setTimeout(() => { document.body.style.overflow = ''; }, 450);
     }
 
-    function initSlotVideos() {
-      const videos = document.querySelectorAll('.slot-icon video');
-      if (!videos.length) return;
-      let ready = 0;
-      const checkAll = () => {
-        if (++ready === videos.length) videos.forEach(v => v.play().catch(() => {}));
-      };
-      videos.forEach(v => {
-        if (v.readyState >= 3) checkAll();
-        else v.addEventListener('canplaythrough', checkAll, { once: true });
-      });
-    }
-
     renderGrid();
-    initSlotVideos();
 
     // ── Lightbox ──────────────────────────────────────────────────────────────
 
