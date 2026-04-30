@@ -159,12 +159,48 @@
       background: var(--bg);
       width: 100%;
       max-width: 1400px;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
+      gap: 12px;
       padding-bottom: 24px;
       border-bottom: 1px solid var(--border);
       margin-bottom: clamp(32px, 4vh, 56px);
+    }
+
+    .detail-page-header .sys-label {
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .header-nav-btns {
+      display: none;
+      gap: 6px;
+    }
+
+    .header-nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--green);
+      font-size: 13px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .header-nav-btn:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 8px rgba(15, 172, 62, 0.25);
+    }
+
+    .header-nav-btn:disabled {
+      opacity: 0.2;
+      pointer-events: none;
     }
 
     .back-btn {
@@ -188,6 +224,7 @@
     /* ── Hero Layout ── */
     .hero-layout {
       position: relative;
+      overflow: visible;
       width: 100%;
       max-width: 1400px;
       display: grid;
@@ -208,7 +245,7 @@
 
     @media (max-width: 768px) {
       .detail-inner {
-        padding: 24px 20px 90px;
+        padding: 24px 20px 60px;
       }
 
       .detail-page-header {
@@ -216,25 +253,11 @@
         padding-bottom: 16px;
       }
 
-      /* Arrows fixed to bottom corners — position:fixed inside #pageDetail
-         works because #pageDetail has transform, making it the containing block */
-      .project-nav {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        transform: none;
-        flex-direction: row;
-        padding: 14px 22px;
-        gap: 8px;
-        border-bottom: none;
-        border-radius: 0;
-        z-index: 200;
-      }
+      .detail-page-header .sys-label { display: none; }
 
-      .project-nav.prev { left: 0; border-left: none; border-right: 1px solid var(--border); }
-      .project-nav.next { right: 0; border-right: none; border-left: 1px solid var(--border); }
+      .header-nav-btns { display: flex; }
 
-      .nav-label { display: none; }
+      .project-nav { display: none; }
     }
 
     /* ── Hero ── */
@@ -1316,6 +1339,10 @@
           <div class="detail-page-header">
             <button class="back-btn" id="backBtn">&#9664;&nbsp;&nbsp;EXIT</button>
             <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
+            <div class="header-nav-btns">
+              <button class="header-nav-btn" id="prevProjectHeader" ${!prev ? 'disabled' : ''}>&#9664;</button>
+              <button class="header-nav-btn" id="nextProjectHeader" ${!next ? 'disabled' : ''}>&#9654;</button>
+            </div>
           </div>
 
           <div class="hero-layout">
@@ -1422,6 +1449,11 @@
       const nextBtn = overlay.querySelector('#nextProject');
       if (prevBtn) prevBtn.addEventListener('click', () => openProject(index - 1, 'prev'));
       if (nextBtn) nextBtn.addEventListener('click', () => openProject(index + 1, 'next'));
+
+      const prevHeaderBtn = overlay.querySelector('#prevProjectHeader');
+      const nextHeaderBtn = overlay.querySelector('#nextProjectHeader');
+      if (prevHeaderBtn) prevHeaderBtn.addEventListener('click', () => openProject(index - 1, 'prev'));
+      if (nextHeaderBtn) nextHeaderBtn.addEventListener('click', () => openProject(index + 1, 'next'));
     }
 
     function loadProjectContent(overlay, index, enterClass) {
