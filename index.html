@@ -1047,6 +1047,8 @@
   </div>
 
   <script>
+    const pageStartTime = performance.now();
+
     const projects = [
       {
         name:  'UGC Creation',
@@ -1252,6 +1254,16 @@
         }
 
         grid.appendChild(slot);
+
+        if (p && p.video) {
+          const video = slot.querySelector('.slot-icon video');
+          if (video) {
+            video.addEventListener('loadedmetadata', () => {
+              const elapsed = (performance.now() - pageStartTime) / 1000;
+              video.currentTime = elapsed % video.duration;
+            }, { once: true });
+          }
+        }
       }
     }
 
