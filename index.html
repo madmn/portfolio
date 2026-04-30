@@ -1479,16 +1479,8 @@
       if (!alreadyOpen) {
         const headerEl     = document.querySelector('header');
         const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
-        const isMobile     = window.innerWidth <= 768;
 
-        if (isMobile) {
-          overlay.style.top = '0';
-          const inner = overlay.querySelector('.detail-inner');
-          if (inner) inner.style.paddingTop = headerBottom + 'px';
-        } else {
-          overlay.style.top = headerBottom + 'px';
-        }
-
+        overlay.style.top = headerBottom + 'px';
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
         headerEl.classList.add('detail-open');
