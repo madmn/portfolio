@@ -151,26 +151,15 @@
     .detail-inner.enter-right { animation: slideInFromRight 0.25s ease forwards; }
     .detail-inner.enter-left  { animation: slideInFromLeft  0.25s ease forwards; }
 
-    /* ── Header States (normal vs detail-open) ── */
-    .header-detail {
-      display: none;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-detail .sys-label {
-      text-align: center;
-      margin-bottom: 0;
-    }
-
-    header.detail-open .header-default { display: none; }
-    header.detail-open .header-detail  { display: grid; }
+    /* ── Header detail-open extras ── */
+    #globalBackBtn { display: none; }
+    header.detail-open #globalBackBtn { display: flex; align-items: center; }
 
     .header-nav-btns {
-      display: flex;
+      display: none;
       gap: 6px;
     }
+    header.detail-open .header-nav-btns { display: flex; }
 
     .header-nav-btn {
       background: none;
@@ -980,25 +969,20 @@
 
   <div id="appWrap">
     <header>
-      <div class="header-default">
-        <div class="sys-label">System · Memory Card · 8MB</div>
-        <div class="header-row">
-          <div>
-            <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
-            <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
-          </div>
-          <div class="mem-bar-wrap">
-            <span>Memory used</span>
-            <div class="mem-bar">
-              <div class="bar-track"><div class="bar-fill"></div></div>
-              <span>8 / 12 blocks</span>
-            </div>
+      <div class="sys-label">System · Memory Card · 8MB</div>
+      <div class="header-row">
+        <div>
+          <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
+          <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
+        </div>
+        <div class="mem-bar-wrap">
+          <span>Memory used</span>
+          <div class="mem-bar">
+            <div class="bar-track"><div class="bar-fill"></div></div>
+            <span>8 / 12 blocks</span>
           </div>
         </div>
-      </div>
-      <div class="header-detail">
         <button class="back-btn" id="globalBackBtn">&#9664;&nbsp;&nbsp;EXIT</button>
-        <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
         <div class="header-nav-btns">
           <button class="header-nav-btn" id="globalPrevBtn">&#9664;</button>
           <button class="header-nav-btn" id="globalNextBtn">&#9654;</button>
