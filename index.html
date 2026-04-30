@@ -614,6 +614,14 @@
       text-shadow: 0 0 20px rgba(15, 172, 62, 0.6), 0 0 50px rgba(15, 172, 62, 0.2);
     }
 
+    header.detail-open h1 {
+      cursor: pointer;
+    }
+
+    header.detail-open h1:hover {
+      text-shadow: 0 0 28px rgba(15, 172, 62, 0.9), 0 0 60px rgba(15, 172, 62, 0.4);
+    }
+
     .cursor {
       display: inline-block;
       width: clamp(10px, 1.2vw, 18px);
@@ -1503,6 +1511,9 @@
     renderGrid();
 
     document.getElementById('globalBackBtn').addEventListener('click', closeProject);
+    document.querySelector('h1').addEventListener('click', () => {
+      if (document.querySelector('header').classList.contains('detail-open')) closeProject();
+    });
     document.getElementById('globalPrevBtn').addEventListener('click', () => {
       if (currentProjectIndex > 0) openProject(currentProjectIndex - 1, 'prev');
     });
