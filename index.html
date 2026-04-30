@@ -258,6 +258,27 @@
       .project-nav { display: none; }
     }
 
+    @media (max-width: 540px) {
+      h1 {
+        letter-spacing: 2px;
+      }
+
+      .header-sub {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+      }
+
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .mem-bar-wrap {
+        align-items: flex-start;
+      }
+    }
+
     /* ── Hero ── */
     .detail-hero {
       grid-column: 1;
@@ -606,7 +627,7 @@
     }
 
     h1 {
-      font-size: clamp(24px, 3vw, 48px);
+      font-size: clamp(16px, 4.5vw, 48px);
       font-weight: normal;
       color: var(--green);
       letter-spacing: 5px;
