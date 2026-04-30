@@ -152,14 +152,36 @@
     .detail-inner.enter-left  { animation: slideInFromLeft  0.25s ease forwards; }
 
     /* ── Header detail-open extras ── */
-    #globalBackBtn { display: none; }
-    header.detail-open #globalBackBtn { display: flex; align-items: center; }
+    .header-right {
+      position: relative;
+    }
+
+    .mem-bar-wrap {
+      transition: opacity 0.3s ease;
+    }
+    header.detail-open .mem-bar-wrap {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #globalBackBtn {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    header.detail-open #globalBackBtn {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .header-nav-btns {
       display: none;
       gap: 6px;
     }
-    header.detail-open .header-nav-btns { display: flex; }
 
     .header-nav-btn {
       background: none;
@@ -231,7 +253,7 @@
         padding: 24px 20px 60px;
       }
 
-      .header-detail .sys-label { display: none; }
+      header.detail-open .header-nav-btns { display: flex; }
 
       .project-nav { display: none; }
     }
@@ -975,14 +997,16 @@
           <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
           <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
         </div>
-        <div class="mem-bar-wrap">
-          <span>Memory used</span>
-          <div class="mem-bar">
-            <div class="bar-track"><div class="bar-fill"></div></div>
-            <span>8 / 12 blocks</span>
+        <div class="header-right">
+          <div class="mem-bar-wrap">
+            <span>Memory used</span>
+            <div class="mem-bar">
+              <div class="bar-track"><div class="bar-fill"></div></div>
+              <span>8 / 12 blocks</span>
+            </div>
           </div>
+          <button class="back-btn" id="globalBackBtn">&#9664;&nbsp;&nbsp;EXIT</button>
         </div>
-        <button class="back-btn" id="globalBackBtn">&#9664;&nbsp;&nbsp;EXIT</button>
         <div class="header-nav-btns">
           <button class="header-nav-btn" id="globalPrevBtn">&#9664;</button>
           <button class="header-nav-btn" id="globalNextBtn">&#9654;</button>
