@@ -151,30 +151,24 @@
     .detail-inner.enter-right { animation: slideInFromRight 0.25s ease forwards; }
     .detail-inner.enter-left  { animation: slideInFromLeft  0.25s ease forwards; }
 
-    /* ── Detail Page Header ── */
-    .detail-page-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--bg);
-      width: 100%;
-      max-width: 1400px;
-      display: grid;
+    /* ── Header States (normal vs detail-open) ── */
+    .header-detail {
+      display: none;
       grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 12px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: clamp(32px, 4vh, 56px);
     }
 
-    .detail-page-header .sys-label {
+    .header-detail .sys-label {
       text-align: center;
       margin-bottom: 0;
     }
 
+    header.detail-open .header-default { display: none; }
+    header.detail-open .header-detail  { display: grid; }
+
     .header-nav-btns {
-      display: none;
+      display: flex;
       gap: 6px;
     }
 
@@ -248,14 +242,7 @@
         padding: 24px 20px 60px;
       }
 
-      .detail-page-header {
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-      }
-
-      .detail-page-header .sys-label { display: none; }
-
-      .header-nav-btns { display: flex; }
+      .header-detail .sys-label { display: none; }
 
       .project-nav { display: none; }
     }
@@ -993,18 +980,28 @@
 
   <div id="appWrap">
     <header>
-      <div class="sys-label">System · Memory Card · 8MB</div>
-      <div class="header-row">
-        <div>
-          <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
-          <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
-        </div>
-        <div class="mem-bar-wrap">
-          <span>Memory used</span>
-          <div class="mem-bar">
-            <div class="bar-track"><div class="bar-fill"></div></div>
-            <span>8 / 12 blocks</span>
+      <div class="header-default">
+        <div class="sys-label">System · Memory Card · 8MB</div>
+        <div class="header-row">
+          <div>
+            <h1>Jake Walkden // Portfolio<span class="cursor"></span></h1>
+            <div class="header-sub">3D Art &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Tech</div>
           </div>
+          <div class="mem-bar-wrap">
+            <span>Memory used</span>
+            <div class="mem-bar">
+              <div class="bar-track"><div class="bar-fill"></div></div>
+              <span>8 / 12 blocks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-detail">
+        <button class="back-btn" id="globalBackBtn">&#9664;&nbsp;&nbsp;EXIT</button>
+        <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
+        <div class="header-nav-btns">
+          <button class="header-nav-btn" id="globalPrevBtn">&#9664;</button>
+          <button class="header-nav-btn" id="globalNextBtn">&#9654;</button>
         </div>
       </div>
     </header>
@@ -1336,15 +1333,6 @@
       const next  = projects[index + 1];
       return `
         <div class="detail-inner">
-          <div class="detail-page-header">
-            <button class="back-btn" id="backBtn">&#9664;&nbsp;&nbsp;EXIT</button>
-            <div class="sys-label">System &middot; Memory Card &middot; 8MB</div>
-            <div class="header-nav-btns">
-              <button class="header-nav-btn" id="prevProjectHeader" ${!prev ? 'disabled' : ''}>&#9664;</button>
-              <button class="header-nav-btn" id="nextProjectHeader" ${!next ? 'disabled' : ''}>&#9654;</button>
-            </div>
-          </div>
-
           <div class="hero-layout">
             ${prev ? `<button class="project-nav prev" id="prevProject">
               <span class="nav-arrow">&#9664;</span>
@@ -1434,7 +1422,6 @@
 
 
     function wireDetailEvents(overlay, index) {
-      overlay.querySelector('#backBtn').addEventListener('click', closeProject);
       overlay.querySelectorAll('.thumb').forEach((thumb, i) => {
         thumb.addEventListener('click', () => selectMedia(i));
       });
@@ -1449,11 +1436,6 @@
       const nextBtn = overlay.querySelector('#nextProject');
       if (prevBtn) prevBtn.addEventListener('click', () => openProject(index - 1, 'prev'));
       if (nextBtn) nextBtn.addEventListener('click', () => openProject(index + 1, 'next'));
-
-      const prevHeaderBtn = overlay.querySelector('#prevProjectHeader');
-      const nextHeaderBtn = overlay.querySelector('#nextProjectHeader');
-      if (prevHeaderBtn) prevHeaderBtn.addEventListener('click', () => openProject(index - 1, 'prev'));
-      if (nextHeaderBtn) nextHeaderBtn.addEventListener('click', () => openProject(index + 1, 'next'));
     }
 
     function loadProjectContent(overlay, index, enterClass) {
@@ -1477,16 +1459,19 @@
         const enterClass = direction === 'next' ? 'enter-right' : 'enter-left';
         const inner      = overlay.querySelector('.detail-inner');
         if (inner) inner.classList.add(exitClass);
-        setTimeout(() => loadProjectContent(overlay, index, enterClass), 200);
+        setTimeout(() => {
+          loadProjectContent(overlay, index, enterClass);
+          updateGlobalNav(index);
+        }, 200);
         return;
       }
 
       loadProjectContent(overlay, index, null);
 
       if (!alreadyOpen) {
-        const headerEl    = document.querySelector('header');
+        const headerEl     = document.querySelector('header');
         const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
-        const isMobile    = window.innerWidth <= 768;
+        const isMobile     = window.innerWidth <= 768;
 
         if (isMobile) {
           overlay.style.top = '0';
@@ -1498,15 +1483,32 @@
 
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
+        headerEl.classList.add('detail-open');
       }
+
+      updateGlobalNav(index);
     }
 
     function closeProject() {
       document.getElementById('pageDetail').classList.remove('open');
+      document.querySelector('header').classList.remove('detail-open');
       setTimeout(() => { document.body.style.overflow = ''; }, 450);
     }
 
+    function updateGlobalNav(index) {
+      document.getElementById('globalPrevBtn').disabled = !projects[index - 1];
+      document.getElementById('globalNextBtn').disabled = !projects[index + 1];
+    }
+
     renderGrid();
+
+    document.getElementById('globalBackBtn').addEventListener('click', closeProject);
+    document.getElementById('globalPrevBtn').addEventListener('click', () => {
+      if (currentProjectIndex > 0) openProject(currentProjectIndex - 1, 'prev');
+    });
+    document.getElementById('globalNextBtn').addEventListener('click', () => {
+      if (currentProjectIndex < projects.length - 1) openProject(currentProjectIndex + 1, 'next');
+    });
 
     // ── Lightbox ──────────────────────────────────────────────────────────────
 
