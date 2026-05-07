@@ -1116,10 +1116,13 @@
         link:  null,
         video: 'assets/videos/wgc-turnaround.webm',
         media: [
-          { type: 'image',  src: 'assets/images/gold-01.jpg',            captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/gold-02.jpg',            captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/gold-03.jpg',            captionTitle: '', caption: '' },
-          { type: 'image',  src: 'assets/images/gold-04.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC4.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC2.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC3.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC5.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC6.jpg',            captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/WGC7.jpg',            captionTitle: '', caption: '' },
+          { type: 'video',  src: 'assets/videos/drill-1.webm',            captionTitle: '', caption: '' },
         ],
       },
       {
@@ -1333,6 +1336,7 @@
 
     let currentProject      = null;
     let currentProjectIndex = null;
+    let detailHistoryPushed = false;
 
     function getMedia(p) {
       if (p.media) return p.media;
@@ -1525,16 +1529,34 @@
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
         headerEl.classList.add('detail-open');
+        history.pushState({ portfolioDetail: true }, '');
+        detailHistoryPushed = true;
       }
 
       updateGlobalNav(index);
     }
 
-    function closeProject() {
+    function _doCloseProject() {
       document.getElementById('pageDetail').classList.remove('open');
       document.querySelector('header').classList.remove('detail-open');
       setTimeout(() => { document.body.style.overflow = ''; }, 450);
     }
+
+    function closeProject() {
+      if (detailHistoryPushed) {
+        detailHistoryPushed = false;
+        history.back(); // triggers popstate → _doCloseProject
+      } else {
+        _doCloseProject();
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      detailHistoryPushed = false;
+      if (document.getElementById('pageDetail').classList.contains('open')) {
+        _doCloseProject();
+      }
+    });
 
     function updateGlobalNav(index) {
       document.getElementById('globalPrevBtn').disabled = !projects[index - 1];
