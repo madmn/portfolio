@@ -330,6 +330,19 @@
       line-height: 0;
     }
 
+    .hero-vimeo-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+    }
+
+    .hero-vimeo-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     video.hero-media {
       transition: filter 0.3s ease;
     }
@@ -1202,6 +1215,22 @@
           { type: 'image',  src: 'assets/images/glamhattan-04.jpg',      captionTitle: '', caption: '' },
         ],
       },
+      {
+        name:  'SODA App',
+        tag:   'Developer',
+        year:  '2021',
+        tools: ['C#', 'Unity', 'Blender', 'Photoshop'],
+        desc:  'This site — a PS2 memory-card inspired portfolio. Plain HTML/CSS/JS, no frameworks. Step one in a deliberate pivot into front-end development.',
+        link:  null,
+        video: 'assets/videos/nascarchic-turnaround.webm',
+        media: [
+          { type: 'image',  src: 'assets/images/app-1.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/app-2.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/app-3.jpg',      captionTitle: '', caption: '' },
+          { type: 'image',  src: 'assets/images/app-4.jpg',      captionTitle: '', caption: '' },
+          { type: 'vimeo',  src: '659808170',                    captionTitle: 'Gameplay Trailer', caption: '' },
+        ],
+      },
     ];
 
     const TOTAL_SLOTS = 12;
@@ -1351,6 +1380,13 @@
       if (!m || !m.src) {
         return `<div class="hero-placeholder"><span>NO SIGNAL</span></div>`;
       }
+      if (m.type === 'vimeo') {
+        return `
+          <div class="hero-vimeo-wrap">
+            <iframe src="https://player.vimeo.com/video/${m.src}?autoplay=0&color=0fac3e&title=0&byline=0&portrait=0"
+              frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>`;
+      }
       if (m.type === 'video') {
         return `
           <div class="hero-video-wrap">
@@ -1364,6 +1400,9 @@
     function renderThumbContent(m, index) {
       if (!m || !m.src) {
         return `<span class="thumb-num">${String(index + 1).padStart(2, '0')}</span>`;
+      }
+      if (m.type === 'vimeo') {
+        return `<img src="https://vumbnail.com/${m.src}.jpg" alt="">`;
       }
       if (m.type === 'video') {
         return `<video src="${m.src}" preload="metadata" muted playsinline></video>`;
