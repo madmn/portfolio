@@ -1027,6 +1027,23 @@
     .contact-link:hover {
       text-shadow: 0 0 8px rgba(15, 172, 62, 0.8);
     }
+
+    .cv-link {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+
+    .cv-link:hover {
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 8px rgba(15, 172, 62, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -1070,6 +1087,7 @@
     <footer>
       <div class="footer-text">&copy; 2026 Jake Walkden</div>
       <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
+      <a class="cv-link" href="assets/cv.pdf" download>&#9660;&nbsp; Download CV</a>
     </footer>
   </div>
 
@@ -1480,6 +1498,7 @@
           <footer class="detail-footer">
             <div class="footer-text">&copy; 2026 Jake Walkden</div>
             <a class="contact-link" href="mailto:tfvwalkden@gmail.com">tfvwalkden@gmail.com</a>
+            <a class="cv-link" href="assets/cv.pdf" download>&#9660;&nbsp; Download CV</a>
           </footer>
         </div>`;
     }
